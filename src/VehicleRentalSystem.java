@@ -5,21 +5,12 @@ public class VehicleRentalSystem {
     static ArrayList<RentalTransaction> transactions = new ArrayList<>();
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        while (true) {
-            System.out.println("=== VEHICLE RENTAL MANAGEMENT SYSTEM ===");
-            System.out.println("1. New Rental Booking\n2. Renew Rental\n3. Exit");
-            System.out.print("Select Option: ");
-            String input = sc.nextLine();
-
-            if (input.equals("3")) break;
-            if (input.equals("1")) handleNewBooking(sc);
-            else if (input.equals("2")) handleRenewal(sc);
-        }
+        // Start the Swing GUI from the separate class
+        VehicleRentalSystemGUI.launch();
     }
 
+    // Original Console-compatible logic (preserved without changing code logic)
     private static void handleNewBooking(Scanner sc) {
-        // Validation: Loop until a name is entered
         String name = "";
         while (name.trim().isEmpty()) {
             System.out.print("Customer Name: ");
@@ -27,7 +18,6 @@ public class VehicleRentalSystem {
             if (name.trim().isEmpty()) System.out.println("Error: Name cannot be blank.");
         }
 
-        // Validation: Loop until a contact number is entered
         String mobile = "";
         while (mobile.trim().isEmpty()) {
             System.out.print("Contact Number: ");
@@ -66,14 +56,12 @@ public class VehicleRentalSystem {
             }
         }
 
-        // Universal Voucher Logic
         boolean voucherValid = false;
         System.out.print("Have any special voucher? (yes/no): ");
         if (sc.nextLine().equalsIgnoreCase("yes")) {
             System.out.print("Enter Voucher Code: ");
             String codeInput = sc.nextLine();
 
-            // Search all past transactions for this customer to find the code
             for (RentalTransaction t : transactions) {
                 if (t.getCustomerName().equalsIgnoreCase(name)) {
                     if (t.validateAndUseVoucher(codeInput)) {
@@ -110,6 +98,25 @@ public class VehicleRentalSystem {
                 Payment payment = getPayment(sc);
                 t.renew(extra, payment);
                 t.printReceipt(true);
+                return;
+            }
+        }
+        System.out.println("Record not found!");
+    }
+
+    private static void handleReturn(Scanner sc) {
+        System.out.print("Customer Name: "); String name = sc.nextLine();
+        System.out.print("Enter Vehicle Code: "); String code = sc.nextLine();
+
+        for (RentalTransaction t : transactions) {
+            if (t.getVehicleCode().equalsIgnoreCase(code) && t.getCustomerName().equalsIgnoreCase(name)) {
+                if (t.isReturned()) {
+                    System.out.println("Vehicle already returned!");
+                    return;
+                }
+                t.returnVehicle();
+                t.printReceipt(false);
+                System.out.println("Vehicle returned successfully!");
                 return;
             }
         }

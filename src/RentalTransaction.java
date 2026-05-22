@@ -11,6 +11,7 @@ public class RentalTransaction {
     private boolean hasAppliedVoucher = false;
     private String loyaltyCode = "NONE";
     private boolean voucherRedeemed = false;
+    private boolean isReturned = false;
 
     public RentalTransaction(String name, String mobile, Vehicle v, int days, Payment payment, boolean isVoucherUsed) {
         this.customerName = name;
@@ -56,50 +57,57 @@ public class RentalTransaction {
         return cost;
     }
 
-    public void printReceipt(boolean isRenewal) {
-        System.out.println("\n--- " + (isRenewal ? "RENEWAL" : "RENTAL") + " RECEIPT ---");
-
-        // Restoration of the Date logic
+    public String getReceiptDetails(boolean isRenewal) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("--- ").append(isRenewal ? "RENEWAL" : "RENTAL").append(" RECEIPT ---\n");
         if (isRenewal) {
-            System.out.println("Original Date:    " + originalDate);
+            sb.append("Original Date:    ").append(originalDate).append("\n");
         } else {
-            System.out.println("Renting Date:     " + originalDate);
+            sb.append("Renting Date:     ").append(originalDate).append("\n");
         }
-
-        System.out.println("Customer Name:    " + customerName);
-        System.out.println("Contact Number:   " + mobileNumber);
-        System.out.println("Vehicle Code:     " + vehicle.getVehicleCode());
-        System.out.println("Vehicle Model:    " + vehicle.getModel());
-
+        sb.append("Customer Name:    ").append(customerName).append("\n");
+        sb.append("Contact Number:   ").append(mobileNumber).append("\n");
+        sb.append("Vehicle Code:     ").append(vehicle.getVehicleCode()).append("\n");
+        sb.append("Vehicle Model:    ").append(vehicle.getModel()).append("\n");
         if (isRenewal) {
-            System.out.println("Past Rented:    " + (totalDuration - currentTermDays) + " Days");
-            System.out.println("New Extension:  " + currentTermDays + " Days");
-            System.out.println("Total Period:   " + totalDuration + " Days");
+            sb.append("Past Rented:    ").append(totalDuration - currentTermDays).append(" Days\n");
+            sb.append("New Extension:  ").append(currentTermDays).append(" Days\n");
+            sb.append("Total Period:   ").append(totalDuration).append(" Days\n");
         } else {
-            System.out.println("Renting Days:   " + currentTermDays);
+            sb.append("Renting Days:   ").append(currentTermDays).append("\n");
         }
-
-        System.out.println("Payment Info:   " + payment.getPaymentDetail() + " (" + payment.getMethodName() + ")");
-
+        sb.append("Payment Info:   ").append(payment.getPaymentDetail()).append(" (").append(payment.getMethodName()).append(")\n");
         double finalCost = calculateCost(currentTermDays);
-        System.out.println("TOTAL AMOUNT:   " + finalCost + " Taka");
-
-        // Discount Notes
+        sb.append("TOTAL AMOUNT:   ").append(finalCost).append(" Taka\n");
         if (hasAppliedVoucher) {
-            System.out.println("[DISCOUNT]: 20% Loyalty Voucher applied!");
+            sb.append("[DISCOUNT]: 20% Loyalty Voucher applied!\n");
         } else if (currentTermDays >= 100) {
-            System.out.println("[DISCOUNT]: 15% Long-term discount applied!");
+            sb.append("[DISCOUNT]: 15% Long-term discount applied!\n");
         } else if (currentTermDays >= 60) {
-            System.out.println("[DISCOUNT]: 10% Standard discount applied!");
+            sb.append("[DISCOUNT]: 10% Standard discount applied!\n");
         }
-
         if (!loyaltyCode.equals("NONE")) {
-            System.out.println("Loyalty Voucher Code: " + loyaltyCode + (voucherRedeemed ? " (USED)" : " (AVAILABLE)"));
+            sb.append("Loyalty Voucher Code: ").append(loyaltyCode).append(voucherRedeemed ? " (USED)" : " (AVAILABLE)").append("\n");
         }
-        System.out.println("------------------------------------\n");
+        sb.append("Status:         ").append(isReturned ? "RETURNED" : "RENTED/ACTIVE").append("\n");
+        sb.append("------------------------------------\n");
+        return sb.toString();
+    }
+
+    public void printReceipt(boolean isRenewal) {
+        System.out.print("\n" + getReceiptDetails(isRenewal));
     }
 
     public String getCustomerName() { return customerName; }
     public String getVehicleCode() { return vehicle.getVehicleCode(); }
     public int getTotalDuration() { return totalDuration; }
+    public boolean isReturned() { return isReturned; }
+    public void returnVehicle() { this.isReturned = true; }
+    public String getMobileNumber() { return mobileNumber; }
+    public Vehicle getVehicle() { return vehicle; }
+    public int getCurrentTermDays() { return currentTermDays; }
+    public Payment getPayment() { return payment; }
+    public boolean isHasAppliedVoucher() { return hasAppliedVoucher; }
+    public String getLoyaltyCode() { return loyaltyCode; }
+    public boolean isVoucherRedeemed() { return voucherRedeemed; }
 }
