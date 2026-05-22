@@ -5,11 +5,57 @@ public class VehicleRentalSystem {
     static ArrayList<RentalTransaction> transactions = new ArrayList<>();
 
     public static void main(String[] args) {
-        // Start the Swing GUI from the separate class
-        VehicleRentalSystemGUI.launch();
+        Scanner sc = new Scanner(System.in);
+        int choice = 0;
+        while (choice != 5) {
+            System.out.println("\n========================================");
+            System.out.println("   VEHICLE RENTAL MANAGEMENT SYSTEM");
+            System.out.println("========================================");
+            System.out.println("  1. New Rental Booking");
+            System.out.println("  2. Renew Rental");
+            System.out.println("  3. Return Vehicle");
+            System.out.println("  4. View All Transactions");
+            System.out.println("  5. Exit");
+            System.out.println("========================================");
+            System.out.print("  Enter your choice (1-5): ");
+            try {
+                choice = Integer.parseInt(sc.nextLine());
+            } catch (Exception e) {
+                choice = 0;
+            }
+            switch (choice) {
+                case 1 -> handleNewBooking(sc);
+                case 2 -> handleRenewal(sc);
+                case 3 -> handleReturn(sc);
+                case 4 -> viewTransactions();
+                case 5 -> System.out.println("\nThank you for using the Vehicle Rental System. Goodbye!");
+                default -> System.out.println("Invalid choice. Please enter 1-5.");
+            }
+        }
+        sc.close();
     }
 
-    // Original Console-compatible logic (preserved without changing code logic)
+    private static void viewTransactions() {
+        if (transactions.isEmpty()) {
+            System.out.println("\nNo transactions found.");
+            return;
+        }
+        System.out.println("\n--- ALL TRANSACTIONS ---");
+        System.out.printf("%-15s %-12s %-10s %-18s %-10s %-10s%n",
+                "Customer", "Contact", "Code", "Model", "Duration", "Status");
+        System.out.println("--------------------------------------------------------------------------");
+        for (RentalTransaction t : transactions) {
+            System.out.printf("%-15s %-12s %-10s %-18s %-10s %-10s%n",
+                    t.getCustomerName(),
+                    t.getMobileNumber(),
+                    t.getVehicleCode(),
+                    t.getVehicle().getModel(),
+                    t.getTotalDuration() + " Days",
+                    t.isReturned() ? "Returned" : "Active");
+        }
+        System.out.println("--------------------------------------------------------------------------");
+    }
+
     private static void handleNewBooking(Scanner sc) {
         String name = "";
         while (name.trim().isEmpty()) {

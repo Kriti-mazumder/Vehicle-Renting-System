@@ -38,7 +38,6 @@ public class RentalTransaction {
         }
     }
 
-    // Method to handle the "Universal" and "Single-use" logic
     public boolean validateAndUseVoucher(String inputCode) {
         if (!loyaltyCode.equals("NONE") && inputCode.equalsIgnoreCase(loyaltyCode)) {
             if (!this.voucherRedeemed) {
@@ -51,7 +50,7 @@ public class RentalTransaction {
 
     public double calculateCost(int days) {
         double cost = vehicle.calculateRent(days);
-        if (hasAppliedVoucher) cost *= 0.80; // 20% discount
+        if (hasAppliedVoucher) cost *= 0.80;
         else if (days >= 100) cost *= 0.85;
         else if (days >= 60) cost *= 0.90;
         return cost;

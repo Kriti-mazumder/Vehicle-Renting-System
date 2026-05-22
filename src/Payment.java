@@ -1,10 +1,8 @@
-// Payment.java
 public abstract class Payment {
     public abstract String getMethodName();
     public abstract String getPaymentDetail();
 }
 
-// CashPayment.java
 class CashPayment extends Payment {
     @Override
     public String getMethodName() { return "Cash"; }
@@ -13,7 +11,6 @@ class CashPayment extends Payment {
     public String getPaymentDetail() { return "N/A"; }
 }
 
-// CardPayment.java
  class CardPayment extends Payment {
     private String cardNumber;
 
@@ -26,7 +23,6 @@ class CashPayment extends Payment {
     public String getPaymentDetail() { return cardNumber; }
 }
 
-// MobilePayment.java
  class MobilePayment extends Payment {
     private String transactionId;
 

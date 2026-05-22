@@ -1,6 +1,5 @@
 import java.util.UUID;
 
-// --- VEHICLE HIERARCHY ---
 abstract class Vehicle {
     private String vehicleCode;
     private String model;
@@ -28,7 +27,7 @@ class Bike extends Vehicle {
     }
 }
 
-// 2. INHERITANCE & POLYMORPHISM: Car subclass
+
 class Car extends Vehicle {
     public Car(String model) { super(model, 500.0); } // 500 taka per day
 
@@ -38,17 +37,16 @@ class Car extends Vehicle {
     }
 }
 
-// Subclass 3: Truck
+
 class Truck extends Vehicle {
     public Truck(String model) { super(model, 1000.0); } // 1000 Taka/day
 
     @Override
     public double calculateRent(int days) {
-        // Trucks might have a heavy-duty surcharge
         return (days * baseRatePerDay) ;
     }
 }
-// Subclass 4: Microbus
+
 class Microbus extends Vehicle {
     public Microbus(String model) { super(model, 720.0); } // 720 Taka/day
 
@@ -57,7 +55,7 @@ class Microbus extends Vehicle {
         return days * baseRatePerDay;
     }
 }
-// Subclass 5: Luxury Car (High-end pricing)
+
 class LuxuryCar extends Vehicle {
     public LuxuryCar(String model) { super(model, 1500.0); } // 1500 Taka/day
 
