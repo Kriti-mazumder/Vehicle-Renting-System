@@ -18,7 +18,7 @@ abstract class Vehicle {
 class Bike extends Vehicle {
     public Bike(String model) {
         super(model, 150.0);
-    } // 150 taka per day
+    }
 
     @Override
     public double calculateRent(int days) {
@@ -29,7 +29,7 @@ class Bike extends Vehicle {
 
 
 class Car extends Vehicle {
-    public Car(String model) { super(model, 500.0); } // 500 taka per day
+    public Car(String model) { super(model, 500.0); }
 
     @Override
     public double calculateRent(int days) {
@@ -39,7 +39,7 @@ class Car extends Vehicle {
 
 
 class Truck extends Vehicle {
-    public Truck(String model) { super(model, 1000.0); } // 1000 Taka/day
+    public Truck(String model) { super(model, 1000.0); }
 
     @Override
     public double calculateRent(int days) {
@@ -48,7 +48,7 @@ class Truck extends Vehicle {
 }
 
 class Microbus extends Vehicle {
-    public Microbus(String model) { super(model, 720.0); } // 720 Taka/day
+    public Microbus(String model) { super(model, 720.0); }
 
     @Override
     public double calculateRent(int days) {
@@ -57,7 +57,7 @@ class Microbus extends Vehicle {
 }
 
 class LuxuryCar extends Vehicle {
-    public LuxuryCar(String model) { super(model, 1500.0); } // 1500 Taka/day
+    public LuxuryCar(String model) { super(model, 1500.0); }
 
     @Override
     public double calculateRent(int days) {

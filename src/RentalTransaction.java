@@ -41,7 +41,7 @@ public class RentalTransaction {
     public boolean validateAndUseVoucher(String inputCode) {
         if (!loyaltyCode.equals("NONE") && inputCode.equalsIgnoreCase(loyaltyCode)) {
             if (!this.voucherRedeemed) {
-                this.voucherRedeemed = true; // Lock it so it can't be used again
+                this.voucherRedeemed = true;
                 return true;
             }
         }
