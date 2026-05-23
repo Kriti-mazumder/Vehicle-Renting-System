@@ -26,8 +26,16 @@ public class VehicleRentalSystem {
             switch (choice) {
                 case 1 -> handleNewBooking(sc);
                 case 2 -> handleRenewal(sc);
-                case 3 -> handleReturn(sc);
-                case 4 -> viewTransactions();
+                case 3 -> {
+                    if (verifyAdminPassword(sc)) {
+                        handleReturn(sc);
+                    }
+                }
+                case 4 -> {
+                    if (verifyAdminPassword(sc)) {
+                        viewTransactions();
+                    }
+                }
                 case 5 -> System.out.println("\nThank you for using the Vehicle Rental System. Goodbye!");
                 default -> System.out.println("Invalid choice. Please enter 1-5.");
             }
@@ -61,21 +69,27 @@ public class VehicleRentalSystem {
         while (name.trim().isEmpty()) {
             System.out.print("Customer Name: ");
             name = sc.nextLine();
-            if (name.trim().isEmpty()) System.out.println("Error: Name cannot be blank.");
+            if (name.trim().isEmpty())
+                System.out.println("Error: Name cannot be blank.");
         }
 
         String mobile = "";
         while (mobile.trim().isEmpty()) {
             System.out.print("Contact Number: ");
             mobile = sc.nextLine();
-            if (mobile.trim().isEmpty()) System.out.println("Error: Contact number cannot be blank.");
+            if (mobile.trim().isEmpty())
+                System.out.println("Error: Contact number cannot be blank.");
         }
 
         int vChoice = 0;
         while (vChoice < 1 || vChoice > 5) {
             System.out.println("\n1. Car  2. Bike  3. Truck  4. Microbus  5. Luxury");
             System.out.print("Choose Vehicle (1-5): ");
-            try { vChoice = Integer.parseInt(sc.nextLine()); } catch (Exception e) { vChoice = 0; }
+            try {
+                vChoice = Integer.parseInt(sc.nextLine());
+            } catch (Exception e) {
+                vChoice = 0;
+            }
         }
 
         Vehicle selectedVehicle = switch (vChoice) {
@@ -117,19 +131,24 @@ public class VehicleRentalSystem {
                 }
             }
 
-            if (voucherValid) System.out.println("Success: 20% discount applied.");
-            else System.out.println("Voucher invalid, used, or belongs to another customer.");
+            if (voucherValid)
+                System.out.println("Success: 20% discount applied.");
+            else
+                System.out.println("Voucher invalid, used, or belongs to another customer.");
         }
 
         Payment payment = getPayment(sc);
-        RentalTransaction transaction = new RentalTransaction(name, mobile, selectedVehicle, days, payment, voucherValid);
+        RentalTransaction transaction = new RentalTransaction(name, mobile, selectedVehicle, days, payment,
+                voucherValid);
         transactions.add(transaction);
         transaction.printReceipt(false);
     }
 
     private static void handleRenewal(Scanner sc) {
-        System.out.print("Customer Name: "); String name = sc.nextLine();
-        System.out.print("Enter Vehicle Code: "); String code = sc.nextLine();
+        System.out.print("Customer Name: ");
+        String name = sc.nextLine();
+        System.out.print("Enter Vehicle Code: ");
+        String code = sc.nextLine();
 
         for (RentalTransaction t : transactions) {
             if (t.getVehicleCode().equalsIgnoreCase(code) && t.getCustomerName().equalsIgnoreCase(name)) {
@@ -151,8 +170,10 @@ public class VehicleRentalSystem {
     }
 
     private static void handleReturn(Scanner sc) {
-        System.out.print("Customer Name: "); String name = sc.nextLine();
-        System.out.print("Enter Vehicle Code: "); String code = sc.nextLine();
+        System.out.print("Customer Name: ");
+        String name = sc.nextLine();
+        System.out.print("Enter Vehicle Code: ");
+        String code = sc.nextLine();
 
         for (RentalTransaction t : transactions) {
             if (t.getVehicleCode().equalsIgnoreCase(code) && t.getCustomerName().equalsIgnoreCase(name)) {
@@ -169,14 +190,30 @@ public class VehicleRentalSystem {
         System.out.println("Record not found!");
     }
 
+    private static boolean verifyAdminPassword(Scanner sc) {
+        System.out.print("Enter Admin Password: ");
+        String password = sc.nextLine();
+        if (password.equals("Rentingadmin")) {
+            return true;
+        } else {
+            System.out.println("Wrong password! Access denied.");
+            return false;
+        }
+    }
+
     private static Payment getPayment(Scanner sc) {
         int choice = 0;
         while (choice < 1 || choice > 3) {
             System.out.println("Payment: 1. Cash  2. Card  3. bKash/Nagad");
-            try { choice = Integer.parseInt(sc.nextLine()); } catch (Exception e) { choice = 0; }
+            try {
+                choice = Integer.parseInt(sc.nextLine());
+            } catch (Exception e) {
+                choice = 0;
+            }
         }
 
-        if (choice == 1) return new CashPayment();
+        if (choice == 1)
+            return new CashPayment();
         if (choice == 2) {
             System.out.print("Enter Card Number: ");
             return new CardPayment(sc.nextLine());
